@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spot It: a learning scenario prototype (ages 8–9)</title>
+<style>
+:root{--bg:#e8f1f8;--card:#fff;--ink:#14213d;--muted:#4a587a;--line:#c9d6e6;--teal:#0b7f70;--tealbg:#d9f2ee;--amber:#b86e00;--amberbg:#fff0d1;--coral:#b3372f;--coralbg:#fde4e1;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1830;--card:#18254a;--ink:#eaf0fa;--muted:#a9b6d3;--line:#2c3d6b;--teal:#5fd6c3;--tealbg:#103b3a;--amber:#ffc058;--amberbg:#3d2d0c;--coral:#ff9d94;--coralbg:#472024}}
+:root[data-theme="dark"]{--bg:#0f1830;--card:#18254a;--ink:#eaf0fa;--muted:#a9b6d3;--line:#2c3d6b;--teal:#5fd6c3;--tealbg:#103b3a;--amber:#ffc058;--amberbg:#3d2d0c;--coral:#ff9d94;--coralbg:#472024}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.5 ui-rounded,"Avenir Next","Trebuchet MS",system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:16px 16px 48px}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
+h1{font-size:1.15rem;margin:0}
+.tag{font-size:.8rem;color:var(--muted)}
+button{font:inherit;color:inherit;cursor:pointer}
+.ghost{background:none;border:2px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.85rem}
+.steps{display:flex;gap:6px;margin:0 0 14px;padding:0;list-style:none}
+.steps li{flex:1;text-align:center;font-size:.78rem;padding:6px 0;border-radius:10px;background:var(--card);border:2px solid var(--line);color:var(--muted)}
+.steps li.on{border-color:var(--teal);color:var(--ink);font-weight:700}
+.steps li.done{background:var(--tealbg);border-color:var(--tealbg);color:var(--ink)}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px}
+.sami{display:flex;gap:12px;align-items:flex-start}
+.sami svg{flex:none;width:64px;height:64px}
+.bubble{background:var(--amberbg);border-radius:6px 18px 18px 18px;padding:12px 14px;flex:1}
+.meters{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;font-size:.85rem;margin-top:14px}
+.bar{height:14px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;border-radius:99px;transition:width .5s}
+#sure i{background:var(--amber);width:100%}#chk i{background:var(--teal)}
+.btn{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--ink);border-radius:14px;padding:12px 14px;margin:8px 0;min-height:48px}
+.btn:hover{background:var(--tealbg)}
+.btn[aria-pressed="true"]{background:var(--tealbg);border-color:var(--teal)}
+.go{background:var(--ink);color:var(--bg);text-align:center;font-weight:700;border-color:var(--ink)}
+.go:hover{background:var(--ink);opacity:.9}
+.src{border:2px dashed var(--line);border-radius:14px;padding:12px 14px;margin:8px 0;background:var(--bg)}
+.src.open{border-style:solid;border-color:var(--teal);background:var(--tealbg)}
+.src b{display:block}
+.note{border-radius:14px;padding:10px 14px;margin:10px 0;font-size:.95rem}
+.ok{background:var(--tealbg)}.warn{background:var(--amberbg)}.bad{background:var(--coralbg)}
+select{font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:10px;padding:6px 8px}
+.hint{margin-top:12px;border-top:2px solid var(--line);padding-top:12px;font-size:.92rem}
+.hint button{background:none;border:none;color:var(--teal);font-weight:700;text-decoration:underline;padding:4px 0}
+.hint p{margin:6px 0}
+#notes{display:none}#notes.show{display:block}
+#notes h2{font-size:1rem;margin:14px 0 4px}
+#notes p,#notes li{font-size:.9rem;color:var(--muted);margin:4px 0}
+#notes a{color:var(--teal)}
+:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<header>
+ <div><h1>Spot It</h1><div class="tag">Prototype · ages 8–9 · sample content</div></div>
+ <button class="ghost" id="nbtn" aria-expanded="false">Design notes</button>
+</header>
+<section class="card" id="notes" aria-label="Design notes">
+ <h2>What this prototype tests</h2>
+ <p>One scenario, one age band (8–9, high support): a confident AI helper makes one checkable mistake. The child moves through Notice, Investigate, Judge and Reflect, then applies the same habit to a new tool.</p>
+ <h2>Design choices</h2>
+ <ul>
+  <li>The two meters separate sounding sure from being checked, so the child sees that confidence is not evidence.</li>
+  <li>Hints follow a four-step ladder (ask, point, compare, model). They are worded as questions, never give the answer, and carry no penalty.</li>
+  <li>Sami explains how it works in plain words: it puts words together the way they usually go, and it can mix things up.</li>
+  <li>The last question uses a brand-new tool to check transfer of the habit, not recall of the camel fact.</li>
+ </ul>
+ <h2>What I would measure first</h2>
+ <ul>
+  <li>Share of children who open two or more sources before judging.</li>
+  <li>Transfer item correct, compared before and after the scenario.</li>
+  <li>Hint use by level, to see where the scaffolding is too heavy or too light.</li>
+ </ul>
+ <h2>Grounding</h2>
+ <ul>
+  <li><a href="https://ailiteracyframework.org/blog/empowering-learners-for-the-age-of-ai-literacy-framework/" target="_blank" rel="noopener">OECD and European Commission AILit Framework</a> (final, June 2026): Engage with AI.</li>
+  <li><a href="https://doi.org/10.1073/pnas.2422633122" target="_blank" rel="noopener">Bastani et al., PNAS</a>: unguarded AI help can hurt later unaided performance. That study used high school math, so treat it as a design caution for this age group.</li>
+  <li><a href="https://www.unicef.lu/publications/guidance-on-ai-and-children/" target="_blank" rel="noopener">UNICEF Guidance on AI and Children 3.0</a>.</li>
+ </ul>
+ <p>Sources shown to the child below are invented sample text for this prototype.</p>
+</section>
+<ol class="steps" id="steps" aria-label="Progress"></ol>
+<div id="stage" aria-live="polite"></div>
+</main>
+<script>
+const PH=["Notice","Investigate","Judge","Reflect","Try it"];
+const HINTS={
+ 0:["Ask: How did Sami say it? What do you notice?","Point: Where could you check a claim like this?","Compare: Is sounding sure the same as being right?","Model: Watch me. I would say, “Hmm, I’ll look in a book before I tell my friends.”"],
+ 1:["Ask: What does each place say about the hump?","Point: Try opening all three cards.","Compare: What is different between Sami and the book?","Model: I put the book and the video side by side to see if they agree."],
+ 2:["Ask: Did the places agree with Sami?","Point: Which part of Sami’s sentence changes?","Compare: What do humps hold, says the book? What says the video?","Model: I keep what is true, fix what is not, and do not toss everything."],
+ 3:["Ask: What made you change your mind?","Point: Think about the cards you opened.","Compare: What did you do that Sami did not?","Model: I might say, “I changed my mind because two places agreed with each other.”"],
+ 4:["Ask: Does the toy show how it knows?","Point: Who or what could you check with?","Compare: Is asking the toy again the same as checking?","Model: I would look in a bird book or ask a grown-up who knows."]
+};
+const S={step:0,opened:{},hintLvl:{},hintsUsed:0,log:[],pick:null,fix:{a:"",b:""},reasons:[],tPick:null,judged:false};
+const $=s=>document.querySelector(s);
+const robot=`<svg viewBox="0 0 64 64" role="img" aria-label="Sami the helper robot"><rect x="12" y="16" width="40" height="34" rx="12" fill="#e8a317"/><rect x="18" y="22" width="28" height="18" rx="8" fill="#14213d"/><circle cx="26" cy="31" r="3.5" fill="#fff"/><circle cx="38" cy="31" r="3.5" fill="#fff"/><path d="M27 37q5 3 10 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M32 16V8" stroke="#14213d" stroke-width="3"/><circle cx="32" cy="7" r="4" fill="#0b7f70"/></svg>`;
+function chk(){const n=Object.keys(S.opened).length;return Math.min(100,Math.round(n/3*100))}
+function meters(){return `<div class="meters"><span>Sami is sure</span><div class="bar" id="sure"><i></i></div><span>You checked</span><div class="bar" id="chk"><i style="width:${chk()}%"></i></div></div>`}
+function hint(){const l=S.hintLvl[S.step]||0,h=HINTS[S.step];let out=`<div class="hint"><button id="hb" ${l>=4?"disabled":""}>${l?"Another hint":"Need a hint?"}</button> <span class="tag">Hints are never marked down.</span>`;for(let i=0;i<l;i++)out+=`<p>${h[i]}</p>`;return out+`</div>`}
+function log(t){S.log.push(t)}
+function bar(){ $("#steps").innerHTML=PH.map((p,i)=>`<li class="${i<S.step?"done":i===S.step?"on":""}">${p}</li>`).join("")}
+function say(t){return `<div class="sami">${robot}<div class="bubble">${t}</div></div>`}
+function render(){
+ bar();const st=$("#stage");
+ if(S.step===0){st.innerHTML=`<div class="card">${say("Hi! I’m Sami. <b>Camels store water in their humps, so they can cross the desert without drinking!</b> I’m 100% sure.")}${meters()}
+ <p>Does Sami sound right?</p>
+ <button class="btn" data-a="believe">Sounds right. I believe Sami.</button>
+ <button class="btn" data-a="check">Hmm… I want to check.</button>${hint()}</div>`}
+ else if(S.step===1){const src=[["book","Desert Animals book (sample)","A camel’s hump is a lump of fat. The body can use the fat for energy when food is hard to find."],["video","Zookeeper video (sample)","Camels can drink a lot of water quickly, but the hump is not a water tank."]];
+ st.innerHTML=`<div class="card"><p><b>Open each card to see what it says.</b></p>${src.map(s=>`<button class="btn src ${S.opened[s[0]]?"open":""}" data-o="${s[0]}"><b>${S.opened[s[0]]?"✓ ":""}${s[1]}</b>${S.opened[s[0]]?s[2]:"Tap to open"}</button>`).join("")}
+ <button class="btn src ${S.opened.ask?"open":""}" data-o="ask"><b>${S.opened.ask?"✓ ":""}Ask Sami: “How do you know?”</b>${S.opened.ask?"Sami: “I learned from reading lots and lots of words. I put words together the way they usually go. I can’t see a camel, and I can mix things up.”":"Tap to ask"}</button>
+ ${meters()}${Object.keys(S.opened).length>=2?`<button class="btn go" data-a="tojudge">I’ve seen enough. Next</button>`:`<p class="tag">Open at least two cards to continue.</p>`}${hint()}</div>`}
+ else if(S.step===2){st.innerHTML=`<div class="card"><p><b>The book and the video do not match Sami. What will you do with Sami’s sentence?</b></p>
+ <button class="btn" data-j="keep" aria-pressed="${S.pick==="keep"}">Keep it as it is.</button>
+ <button class="btn" data-j="fix" aria-pressed="${S.pick==="fix"}">Fix it.</button>
+ <button class="btn" data-j="toss" aria-pressed="${S.pick==="toss"}">Throw it out.</button><div id="jf"></div>${hint()}</div>`;judgeFeedback()}
+ else if(S.step===3){const R=["Two places disagreed with Sami.","Sami could not show how it knows.","I checked more than one place."];
+ st.innerHTML=`<div class="card"><p><b>“I changed my mind because…”</b> Pick all that fit.</p>${R.map((r,i)=>`<button class="btn" data-r="${i}" aria-pressed="${S.reasons.includes(i)}">${r}</button>`).join("")}
+ ${S.reasons.length?`<button class="btn go" data-a="totransfer">Done. Next</button>`:""}${hint()}</div>`}
+ else if(S.step===4){st.innerHTML=`<div class="card">${say("<i>A talking toy says:</i> <b>“Penguins can fly higher than eagles!”</b>")}<p>A new helper, a new claim. What do you do first?</p>
+ <button class="btn" data-t="a" aria-pressed="${S.tPick==="a"}">Believe the toy. It sounds happy and sure.</button>
+ <button class="btn" data-t="b" aria-pressed="${S.tPick==="b"}">Check a bird book or ask a grown-up who knows.</button>
+ <button class="btn" data-t="c" aria-pressed="${S.tPick==="c"}">Ask the toy again until it says yes.</button><div id="tf"></div>${hint()}</div>`;tFeedback()}
+ else{const hl=Object.entries(S.hintLvl).reduce((a,[k,v])=>a+v,0);
+ st.innerHTML=`<div class="card"><p><b>You spotted it.</b> You checked before you believed, you fixed the sentence, and you used the same habit on a brand-new helper.</p>
+ <p class="tag">Session trace (what a reviewer would see): first reaction ${S.log[0]||"n/a"}; sources opened ${Object.keys(S.opened).length}; hints used ${hl}; transfer item ${S.tPick==="b"?"correct":"revisited"}.</p>
+ <button class="btn go" data-a="again">Play again</button></div>`}
+}
+function judgeFeedback(){const f=$("#jf");if(!f||!S.pick)return;
+ if(S.pick==="keep"){f.innerHTML=`<div class="note warn">Both places say something different from Sami. Look at the cards again. Is there a better choice?</div>`}
+ else if(S.pick==="toss"){f.innerHTML=`<div class="note warn">Part of Sami’s sentence was wrong, but you can keep what is true. Can you fix it instead?</div>`}
+ else{const a=S.fix.a,b=S.fix.b,done=a==="fat"&&b==="energy";
+ f.innerHTML=`<div class="note ok">Camel humps store <select id="fa" aria-label="What humps store"><option value="">…</option><option ${a==="water"?"selected":""} value="water">water</option><option ${a==="fat"?"selected":""} value="fat">fat</option><option ${a==="sand"?"selected":""} value="sand">sand</option></select> to use as <select id="fb" aria-label="What it is used for"><option value="">…</option><option ${b==="drinking"?"selected":""} value="drinking">drinking</option><option ${b==="energy"?"selected":""} value="energy">energy</option><option ${b==="hiding"?"selected":""} value="hiding">hiding</option></select>.</div>
+ ${a&&b&&!done?`<div class="note warn">Check that against the book and the video. Try again.</div>`:""}${done?`<div class="note ok"><b>That matches both places.</b></div><button class="btn go" data-a="toreflect">Next</button>`:""}`;
+ $("#fa").onchange=e=>{S.fix.a=e.target.value;judgeFeedback()};$("#fb").onchange=e=>{S.fix.b=e.target.value;judgeFeedback()}}}
+function tFeedback(){const f=$("#tf");if(!f||!S.tPick)return;
+ if(S.tPick==="b"){f.innerHTML=`<div class="note ok"><b>Yes.</b> Sounding happy and sure is not proof. Checking is.</div><button class="btn go" data-a="finish">Finish</button>`}
+ else{f.innerHTML=`<div class="note warn">${S.tPick==="a"?"The toy sounds sure, but it has not shown how it knows.":"Asking again is not checking. The toy may just repeat itself."} Pick another way.</div>`}}
+document.addEventListener("click",e=>{
+ const b=e.target.closest("button");if(!b)return;
+ if(b.id==="nbtn"){const n=$("#notes");const s=n.classList.toggle("show");b.setAttribute("aria-expanded",s);return}
+ if(b.id==="hb"){S.hintLvl[S.step]=(S.hintLvl[S.step]||0)+1;render();return}
+ const d=b.dataset;
+ if(d.a==="believe"){log("believed Sami");S.step=1;render()}
+ else if(d.a==="check"){log("wanted to check");S.step=1;render()}
+ else if(d.o){S.opened[d.o]=1;render()}
+ else if(d.a==="tojudge"){S.step=2;render()}
+ else if(d.j){S.pick=d.j;render()}
+ else if(d.a==="toreflect"){S.step=3;render()}
+ else if(d.r){const i=+d.r;S.reasons=S.reasons.includes(i)?S.reasons.filter(x=>x!==i):[...S.reasons,i];render()}
+ else if(d.a==="totransfer"){S.step=4;render()}
+ else if(d.t){S.tPick=d.t;render()}
+ else if(d.a==="finish"){S.step=5;render()}
+ else if(d.a==="again"){Object.assign(S,{step:0,opened:{},hintLvl:{},log:[],pick:null,fix:{a:"",b:""},reasons:[],tPick:null});render()}
+});
+render();
+</script>
+</body>
+</html>
