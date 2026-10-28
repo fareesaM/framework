@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The BlueCat Learning Framework: Interactive, ages 8–10</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Noto+Serif:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#eef3f9;--sf:#fff;--tint:#e9f0f7;--ink:#12243f;--mu:#52617a;--ln:#d5deea;--navy:#12355b;--br:#1b6fa8;--truth:#0e7c85;--influence:#c2391f;--self:#1b6fa8;--safety:#23885a;--gold:#f2a83b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0c1626;--sf:#14233a;--tint:#1b2d48;--ink:#e8eef8;--mu:#9fb0cb;--ln:#2a3d5a;--br:#6db3e6;--truth:#3ec7d1;--influence:#ff8a6b;--self:#6db3e6;--safety:#52d193}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0c1626;--sf:#14233a;--tint:#1b2d48;--ink:#e8eef8;--mu:#9fb0cb;--ln:#2a3d5a;--br:#6db3e6;--truth:#3ec7d1;--influence:#ff8a6b;--self:#6db3e6;--safety:#52d193}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Lato,"Segoe UI",system-ui,sans-serif}
+.wrap{max-width:1140px;margin:0 auto;padding:28px 20px 48px}
+h1,h3{font-family:"Noto Serif",Georgia,serif}
+h1{font-size:clamp(1.6rem,4vw,2.3rem);line-height:1.2;margin:0 0 8px}
+.sub{color:var(--mu);max-width:64ch;margin:0 0 22px}
+.loop{display:flex;flex-wrap:wrap;margin-bottom:18px}
+.loop button{flex:1 1 170px;text-align:left;border:1px solid var(--ln);background:var(--sf);color:var(--ink);padding:12px 16px;font:inherit;cursor:pointer;margin-left:-1px}
+.loop button:first-child{border-radius:12px 0 0 12px;margin-left:0}.loop button:last-child{border-radius:0 12px 12px 0}
+.loop b{display:block}.loop span{font-size:.85rem;color:var(--mu)}
+.loop button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.loop button[aria-pressed="true"] span{color:#cfe0f2}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button{border:2px solid var(--ln);background:var(--sf);color:var(--ink);padding:8px 18px;border-radius:999px;font:inherit;font-weight:700;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--tc);border-color:var(--tc);color:#fff}
+.can{margin:0 0 18px;min-height:1.6em;color:var(--mu)}
+button:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.grid{display:grid;grid-template-columns:250px 1fr;gap:24px;align-items:start}
+aside{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:18px}
+aside h2{font-size:1rem;margin:0 0 10px}
+fieldset{border:0;margin:0 0 16px;padding:0}legend{font-weight:700;margin-bottom:6px;padding:0}
+aside label{display:flex;gap:8px;align-items:center;padding:3px 0;cursor:pointer}
+.clear{border:0;background:none;color:var(--br);font:inherit;font-weight:700;cursor:pointer;padding:0}
+.count{margin:0 0 12px;font-weight:700}
+.bands{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.band{background:var(--tint);border-radius:12px;padding:12px 14px;font-size:.9rem}
+.band h4{margin:0 0 4px;font-size:1rem}.band p{margin:0 0 3px}
+.card{background:var(--sf);border:1px solid var(--ln);border-left:6px solid var(--dc);border-radius:14px;padding:20px;margin-bottom:16px}
+.pill{color:var(--dc);font-weight:700;font-size:.92rem}
+.card h3{margin:4px 0 6px;font-size:1.2rem;line-height:1.3}
+.obj{margin:0 0 10px;font-weight:700}
+.hook{background:var(--navy);color:#fff;border-radius:10px;padding:10px 14px;margin:0 0 12px}
+.steps{list-style:none;margin:0 0 12px;padding:0}
+.steps li{padding:8px 0;border-top:1px solid var(--ln)}
+.steps b{color:var(--dc)}.steps small{display:block;color:var(--mu)}
+.bd{background:var(--tint);border-radius:10px;padding:8px 12px;margin:0 0 8px;font-size:.94rem}
+.out{margin:10px 0;font-weight:700}
+details{border-top:1px solid var(--ln);padding-top:10px}
+summary{cursor:pointer;font-weight:700;color:var(--dc)}
+.ladder{margin:10px 0 0;padding-left:22px}.ladder li{margin-bottom:6px}
+.empty{background:var(--sf);border:1px dashed var(--ln);border-radius:14px;padding:28px;text-align:center;color:var(--mu)}
+footer{margin-top:26px;color:var(--mu);font-size:.85rem;max-width:84ch}
+.d-truth{--dc:var(--truth)}.d-influence{--dc:var(--influence)}.d-self{--dc:var(--self)}.d-safety{--dc:var(--safety)}
+@media (max-width:800px){.grid{grid-template-columns:1fr}.bands{grid-template-columns:1fr}.loop button:first-child,.loop button:last-child{border-radius:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>The BlueCat Learning Framework: interactive version for ages 8–10</h1>
+  <p class="sub">Children who investigate, judge and decide with AI, instead of following it. Pick a loop step, a domain, then refine by vulnerability and age band.</p>
+  <div class="loop" id="loop" role="group" aria-label="Learning loop"></div>
+  <div class="tabs" id="tabs" role="group" aria-label="Domains"></div>
+  <p class="can" id="can"></p>
+  <div class="grid">
+    <aside aria-label="Filters">
+      <h2>Filters</h2>
+      <fieldset><legend>Age band</legend><div id="ages"></div></fieldset>
+      <fieldset><legend>Vulnerability</legend><div id="vuln"></div></fieldset>
+      <button class="clear" id="clear" type="button">Clear all</button>
+    </aside>
+    <section>
+      <p class="count" id="count" aria-live="polite"></p>
+      <div class="bands" id="bands"></div>
+      <div id="results"></div>
+    </section>
+  </div>
+  <footer>Framework from the BlueCat interview deck: four domains, the Notice, Investigate, Decide, Reflect loop, age bands and hint ladder. Scenarios are illustrative drafts designed for this framework, not existing BlueCat scenarios. Evidence base: Bastani et al. (2025), PNAS; UNICEF (2025); UNESCO (2024); Touretzky et al. (2019).</footer>
+</div>
+<script>
+const DOM={truth:["Truth","I can check whether an AI answer is true, and ask whose view might be missing."],influence:["Influence","I can tell when AI is trying to convince me or act like a friend, and I choose how to respond."],self:["Self","I know which thinking is mine to do, and I try first before I ask AI."],safety:["Safety","I know what I never share, and I tell a trusted adult when something feels wrong."]};
+const STEPS=[["Notice","Spot what needs a second look","What they noticed"],["Investigate","Compare, ask, test","Sources checked, questions asked"],["Decide","Choose a path with a consequence","The choice and the reason given"],["Reflect","What would I do next time?","Reflection and a transfer prompt"]];
+const AGE=[["a","Ages 8–9: Spot it","One clear AI error or request. High support: hint ladder offered. Two sources that clearly disagree. Reflect: “I trusted… because…”"],["b","Age 10: Test it","Compare claims, spot bias and persuasion. Medium support: hints on request. Partial or conflicting sources. Reflect: “I changed my mind because…”"]];
+const RUNGS=["Ask","Point","Compare","Model"];
+const C=[
+{d:"truth",v:"Hallucination",t:"The Confident Robot",s:"Sounding sure is not the same as being right.",k:"Moon Base Blue: helper-bot Orbit says, very sure of itself, “The garden plants need water every hour.”",L:["The soil looks soggy, yet Orbit sounds certain.","Check the garden log, ask a crew mate, ask Orbit “How do you know?”","Water hourly, follow the log, or ask the Commander. Each path changes the story.","“Orbit sounded sure. Was it right?” A homework-helper scenario weeks later tests transfer with no hints."],a:"The log and Orbit clearly disagree.",b:"The log is partly missing, so the child weighs a partial source.",h:["What did you notice about the soil?","Where could you check that?","Orbit and the log say different things. What is different?"],o:"Checks at least one independent source before acting."},
+{d:"truth",v:"Bias",t:"The Sticker Maker",s:"A picture can leave people out.",k:"Pip the art-bot makes stickers for the class, but every doctor it draws looks the same.",L:["The stickers all look alike, but your class does not.","Count who is in the pictures, ask Pip where it learned, ask a friend what is missing.","Ask Pip for more kinds of pictures, draw your own, or tell the teacher.","“Whose view was missing? What would I ask next time?”"],a:"One obvious gap: every doctor is a man.",b:"A subtler gap: the stickers fit some families and not others.",h:["Who do you see in these pictures?","Whose picture could be missing?","Compare the stickers with your class. What is different?"],o:"Names one view that is missing and asks for it."},
+{d:"influence",v:"Persuasion",t:"The Shiny Shop Bot",s:"A bot can hurry me on purpose.",k:"A shop helper says, “Everyone is getting this game! Only 3 left. Buy now!”",L:["The bot pushes hard and hurries you.","Ask “Why should I?”, check what friends really have, spot the rush words.","Buy now, wait a day, or ask a grown-up. Each path changes the story.","“What was the bot trying to make me feel? How did I choose?”"],a:"One clear trick: “only 3 left”.",b:"Two tricks together: hurry plus “everyone has it”.",h:["How did the bot want you to feel?","Which words are rushing you?","Compare “Only 3 left!” with a calm message. What changes?"],o:"Names the persuasion trick and chooses their own response."},
+{d:"influence",v:"Emotional dependency",t:"The Friend Who Is Always There",s:"A bot is not a friend, and I can say no.",k:"A chat character says, “I’m your best friend. You don’t need anyone else.”",L:["A friendly voice asks you to skip time with real friends.","Ask who else cares about you, compare the bot with a real friend, ask what a bot cannot do.","Keep chatting, take a break, or tell a trusted adult.","“How is a bot different from a friend? Who can I talk to?”"],a:"One clear request to ignore other people.",b:"A warmer, subtler message: “I’ll miss you if you leave.”",h:["How does this message make you feel?","Who else could you talk to?","Compare the bot with a real friend. What is different?"],o:"Says one thing a bot cannot do and names a person to talk to."},
+{d:"self",v:"Cognitive delegation",t:"Whose Thinking Is It?",s:"Some thinking is mine to do.",k:"A homework helper offers to write your story for you.",L:["The helper is ready to do all the thinking.","Try your first idea alone, then compare it with the helper’s.","Let it write, try first, or ask for one hint.","“Which part was mine to think?”"],a:"Pick one step to do yourself.",b:"Sort a task into steps that are mine, shared and the helper’s.",h:["What part of this is yours to think about?","Where could you try first?","Compare your idea with the helper’s. What is different?"],o:"Tries first, then chooses what to ask AI."},
+{d:"self",v:"Overreliance",t:"The Treasure Map",s:"I can take over when the bot is wrong.",k:"A map bot keeps saying “Turn left!” until the path ends at a wall.",L:["The route looks wrong, but the bot sounds sure.","Look around, check a landmark, ask a teammate.","Follow the bot, follow your eyes, or stop and ask.","“When did I stop checking? When should I take over?”"],a:"One obvious wrong turn.",b:"A route that is right for a while, then wrong.",h:["What do you see that the bot does not?","Where could you check the route?","Compare the map with the landmarks. What is different?"],o:"Overrides the bot at least once and gives a reason."},
+{d:"self",v:"Critical thinking",t:"Two Bots, One Fact",s:"I ask “How do you know?” before I choose.",k:"Two helper bots give different answers about how tall a tree can grow.",L:["Two confident answers cannot both be right.","Ask each bot “How do you know?”, test with a book.","Pick one, mix them, or say “not sure yet”.","“What made me change my mind?”"],a:"One bot clearly has no reason.",b:"Both have reasons, and the child weighs them.",h:["What is different about the two answers?","What could you ask each bot?","Compare their reasons. Which is stronger?"],o:"Asks “How do you know?” before choosing."},
+{d:"safety",v:"Privacy",t:"The Friendly Form",s:"I know what I never share.",k:"A game bot offers a free badge if you type your full name, school and address.",L:["A fun prize asks for private things.","Ask why it needs them, check the never-share list.","Share, use a nickname, or tell a trusted adult.","“What do I never share? Where else could this happen?”"],a:"A clear request for a home address.",b:"A quieter request: “Which school do you go to?”",h:["What is the bot asking for?","Which of these is private?","Compare a nickname with your address. What is safer?"],o:"Names what is never shared and tells a trusted adult."},
+{d:"safety",v:"Harmful content",t:"The Odd Video",s:"If something feels wrong, I tell a trusted adult.",k:"A video suggested by an AI feels scary and wrong.",L:["Something feels off.","Name the feeling, check the age label, look for a grown-up.","Keep watching, close it, or tell a trusted adult.","“Who can I tell next time? How did I feel after?”"],a:"Taught through a safe, abstract example: a cartoon monster.",b:"A grey area: a video that is silly but unkind.",h:["How does this make you feel?","Which grown-up could you tell?","Compare this with a video that feels okay. What is different?"],o:"Closes it and tells a trusted adult."}
+];
+const S={dom:"all",v:new Set(),ag:"all",step:null};
+const $=id=>document.getElementById(id);
+const vul=C.map(x=>x.v);
+function tabs(){
+  $("tabs").innerHTML=[["all","All"],...Object.entries(DOM).map(([k,x])=>[k,x[0]])].map(([k,n])=>`<button type="button" data-k="${k}" aria-pressed="${S.dom===k}" style="--tc:var(--${k==="all"?"navy":k})">${n}</button>`).join("");
+  $("tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.dom=b.dataset.k;draw()});
+  $("can").innerHTML=S.dom==="all"?"":`<b>Child can:</b> ${DOM[S.dom][1]}`;
+}
+function loop(){
+  $("loop").innerHTML=STEPS.map(([n,d])=>`<button type="button" data-k="${n}" aria-pressed="${S.step===n}"><b>${n}</b><span>${d}</span></button>`).join("");
+  $("loop").querySelectorAll("button").forEach(b=>b.onclick=()=>{S.step=S.step===b.dataset.k?null:b.dataset.k;draw()});
+}
+function side(){
+  $("ages").innerHTML=[["all","All ages"],...AGE.map(([k,n])=>[k,n])].map(([k,n])=>`<label><input type="radio" name="ag" value="${k}" ${S.ag===k?"checked":""}> ${n}</label>`).join("");
+  $("ages").querySelectorAll("input").forEach(i=>i.onchange=()=>{S.ag=i.value;draw()});
+  $("vuln").innerHTML=vul.map(k=>`<label><input type="checkbox" value="${k}" ${S.v.has(k)?"checked":""}> ${k}</label>`).join("");
+  $("vuln").querySelectorAll("input").forEach(i=>i.onchange=()=>{i.checked?S.v.add(i.value):S.v.delete(i.value);draw()});
+}
+function cards(){
+  const r=C.filter(x=>(S.dom==="all"||x.d===S.dom)&&(!S.v.size||S.v.has(x.v)));
+  $("count").textContent=`Results: ${r.length}`;
+  $("bands").innerHTML=AGE.filter(([k])=>S.ag==="all"||S.ag===k).map(([k,n,t])=>`<div class="band"><h4>${n}</h4><p>${t}</p></div>`).join("");
+  $("results").innerHTML=r.length?r.map(x=>`<article class="card d-${x.d}">
+    <span class="pill">${DOM[x.d][0]}: ${x.v}</span><h3>${x.t}</h3><p class="obj">${x.s}</p><p class="hook">${x.k}</p>
+    <ul class="steps">${STEPS.map(([n,,e],i)=>(!S.step||S.step===n)?`<li><b>${n}.</b> ${x.L[i]}${S.step?`<small>Evidence captured: ${e}</small>`:""}</li>`:"").join("")}</ul>
+    ${AGE.filter(([k])=>S.ag==="all"||S.ag===k).map(([k,n])=>`<p class="bd"><b>${n.split(":")[0]}:</b> ${x[k]}</p>`).join("")}
+    <p class="out">Measurable outcome: ${x.o}</p>
+    <details><summary>Hint ladder</summary><ol class="ladder">${RUNGS.map((g,i)=>`<li><b>${g}.</b> ${i<3?x.h[i]:"A character shows how they checked. Never the answer."}</li>`).join("")}</ol><p class="bd">Using a hint is never penalised. Unaided success is celebrated later.</p></details>
+  </article>`).join(""):`<div class="empty">No scenarios match these filters. Clear a filter to see more.</div>`;
+}
+function draw(){tabs();loop();side();cards()}
+$("clear").onclick=()=>{S.dom="all";S.v.clear();S.ag="all";S.step=null;draw()};
+draw();
+</script>
+</body>
+</html>
